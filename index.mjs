@@ -1,7 +1,7 @@
 import express from 'express';
 
 const app = express()
-const PORT = 5000
+const PORT = 3000
 
 app.get('/try', (request,response) => {
   console.log('Request received at /try'); // Debug log
