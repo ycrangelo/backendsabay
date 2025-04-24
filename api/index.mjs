@@ -1,34 +1,61 @@
-import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 
 //import models
-import user from '../models/userModel.mjs';
-import Comments from '../models/commentsModel.mjs';
-import Post from '../models/postModel.mjs';
 
-
-// 💡 Import routes
+// Import routes
 import userRoutes from './routes/userRoutes.mjs';
 
 const app = express();
-const PORT = 3000;
-const mongo = mongoose
-mongo.connect("mongodb+srv://angelolapagan:54nCq8o4pFTcxIKO@cluster0.qzw9lyx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-app.use(express.json()); // Needed for POST/PUT requests
+const PORT = process.env.PORT || 3000;
 
-// Use CORS middleware properly
+// MongoDB connection options
+const mongoOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 50,
+  minPoolSize: 10
+};
+
+// Connect to MongoDB with retry logic
+const connectWithRetry = async () => {
+  try {
+    await mongoose.connect("mongodb+srv://angelolapagan:54nCq8o4pFTcxIKO@cluster0.qzw9lyx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", mongoOptions);
+    console.log('MongoDB connected successfully');
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+    setTimeout(connectWithRetry, 5000);
+  }
+};
+
+connectWithRetry();
+
+// Middleware
+app.use(helmet()); // Security headers
+app.use(compression()); // Compress responses
+app.use(express.json({ limit: '10kb' })); // Limit JSON payload size
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// CORS configuration
 app.use(cors({
-  origin: "*", // Allow all origins
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  maxAge: 86400 // Cache preflight requests for 24 hours
 }));
 
-// Ensure all responses include CORS headers
+// Response headers
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("X-Content-Type-Options", "nosniff");
+  res.header("X-Frame-Options", "DENY");
   next();
 });
 
@@ -39,12 +66,27 @@ app.options('*', (req, res) => {
 
 // Test route
 app.get('/', (req, res) => {
-  console.log('Request received at /try');
-  res.send('hello Jake and Charles');
-}); 
-// 💡 Use the route
-app.use('/api/users', userRoutes); // Now: GET /api/users
+  res.send('Server is running');
+});
+
+// Use routes
+app.use('/api/users', userRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
 // Start server
-app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+// Handle server shutdown gracefully
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
 });
