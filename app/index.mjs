@@ -12,20 +12,11 @@ import userRoutes from './routes/userRoutes.mjs';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// MongoDB connection options
-const mongoOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  maxPoolSize: 50,
-  minPoolSize: 10
-};
 
 // Connect to MongoDB with retry logic
 const connectWithRetry = async () => {
   try {
-    await mongoose.connect("mongodb+srv://angelolapagan:54nCq8o4pFTcxIKO@cluster0.qzw9lyx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", mongoOptions);
+    await mongoose.connect("mongodb+srv://lornayocor:cXqrgEX74ex576j3@juntos.n0m0ol6.mongodb.net/?retryWrites=true&w=majority&appName=juntos");
     console.log('MongoDB connected successfully');
   } catch (err) {
     console.error('MongoDB connection error:', err);
@@ -37,9 +28,9 @@ connectWithRetry();
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(compression()); // Compress responses
-app.use(express.json({ limit: '10kb' })); // Limit JSON payload size
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// app.use(compression()); // Compress responses
+// app.use(express.json({ limit: '10kb' })); // Limit JSON payload size
+// app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // CORS configuration
 app.use(cors({
