@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const commentSchema = new mongoose.Schema({
   userId: String,
-  userId: String,
   postId: String,
   comment: String,
   createdAt: {

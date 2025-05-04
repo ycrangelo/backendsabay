@@ -3,12 +3,16 @@ import mongoose from "mongoose";
 const postSchema = new mongoose.Schema({
   userId: String,
   postId: String,
-  coordinatesFrom: String,
-  coordinatesTo: String,
-  title: String,
   thoughts: String,
- picture: String,
-  isDeleted: String,
+  picture: String,
+  likes: {
+    type: Number,
+    default: 0
+  },
+  isDeleted: {
+    type: String,
+    default: 'F'
+  },
   createdAt: {
     type: Date,
     default: Date.now

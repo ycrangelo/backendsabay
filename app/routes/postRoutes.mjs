@@ -1,11 +1,11 @@
 import express from 'express';
-import User from '../../models/userModel.mjs';
+import Post from '../../models/postModel.mjs';
 
 const route = express.Router();
 
 
 //creating acc
-route.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
