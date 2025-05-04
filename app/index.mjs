@@ -8,6 +8,9 @@ import mongoose from 'mongoose';
 
 // Import routes
 import userRoutes from './routes/userRoutes.mjs';
+import commentRoutes from './routes/commentRoutes.mjs'
+import savePostRoutes from './routes/savePostRoutes.mjs'
+import postRoutes from './routes/postRoutes.mjs'
 
 const app = express();
 app.use(express.json());
@@ -63,6 +66,9 @@ app.get('/', (req, res) => {
 
 // Use routes
 app.use('/api/users', userRoutes);
+app.use('/api/comment', commentRoutes);
+app.use('/api/saves', savePostRoutes);
+app.use('/api/post', postRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

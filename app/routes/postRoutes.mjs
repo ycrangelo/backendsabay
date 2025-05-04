@@ -4,70 +4,70 @@ import Post from '../../models/postModel.mjs';
 const route = express.Router();
 
 
-//creating acc
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Find user by username
-    const user = await User.findOne({ username });
-
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
-
-    // Check password (plain text comparison here)
-    if (user.password !== password) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
-
-    // If matched
-    res.json({ message: 'Login successful', user: { username: user.username, id: user._id } });
-
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
+//fetch all post
+route.get('/getAllPost', async (req, res) => {
+ try {
+   const post = await Post.find().sort({ createdAt: -1 }); // -1 means descending
+   res.json(post);
+ } catch {
+   res.status(500).json({ error: 'Internal server error' });
+ }
 });
 
+//creating a post
+route.post('/createPost', async (req, res) => {
+  const {userId,thoughts,picture } = req.body;
 
-route.post('/singup', async (req, res) => {
-  const { username, fullname, userId, password, gender, contactNumber } = req.body;
-
-  if (!username || !userId || !password) {
+  if (!userId || !thoughts) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-
   try {
-    const existingUser = await User.findOne({ userId }).select('userId');
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    const newUser = new User({
-      username,
-      fullname,
+    const newPost = new Post({
       userId,
-      gender,
-      contactNumber,
-      password
+      thoughts,
+      picture,
     });
 
-    await newUser.save();
+    await newPost.save();
 
     res.status(201).json({
-      message: 'User created successfully',
-      user: {
-        username,
-        fullname,
+      message: 'Post created successfully',
+      Post: {
         userId,
-        gender,
-        contactNumber
+        thoughts,
       }
     });
   } catch {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+//liking a post
+route.post('/likePost', async (req, res) => {
+  const { postId } = req.body;
+
+  try {
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    post.likes += 1;
+    await post.save();
+
+    res.status(200).json({
+      message: 'Post liked successfully',
+      likes: post.likes
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 
 
 export default route;

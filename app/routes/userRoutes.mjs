@@ -4,7 +4,7 @@ import User from '../../models/userModel.mjs';
 const route = express.Router();
 
 
-//creating acc
+//user loging
 route.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -30,8 +30,9 @@ route.post('/login', async (req, res) => {
 });
 
 
+//user sign up
 route.post('/singup', async (req, res) => {
-  const { username, fullname, userId, password, gender, contactNumber } = req.body;
+  const { username, fullname, password, gender, contactNumber } = req.body;
 
   if (!username || !userId || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -46,7 +47,6 @@ route.post('/singup', async (req, res) => {
     const newUser = new User({
       username,
       fullname,
-      userId,
       gender,
       contactNumber,
       password

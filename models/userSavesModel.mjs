@@ -3,8 +3,12 @@ import mongoose from "mongoose";
 const userSavesSchema = new mongoose.Schema({
   userId: String,
   postId: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-const UserSaves = mongoose.model("UserSaves", userSavesSchema);
+const userSaves = mongoose.model("userSaves", userSavesSchema);
 
-export default UserSaves;
+export default userSaves;
