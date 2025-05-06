@@ -34,7 +34,6 @@ route.post('/createPost', async (req, res) => {
       message: 'Post created successfully',
       Post: {
         userId,
-        thoughts,
       }
     });
   } catch {

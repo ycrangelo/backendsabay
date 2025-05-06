@@ -36,11 +36,11 @@ route.post('/createComment', async (req, res) => {
       message: 'Post created successfully',
       Post: {
         userId,
-        thoughts,
+        comment,
       }
     });
   } catch {
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error 11' });
   }
 });
 

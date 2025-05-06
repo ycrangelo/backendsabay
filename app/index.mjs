@@ -3,6 +3,8 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import { createRouteHandler } from 'uploadthing/express';
+
 
 //import models
 
@@ -11,6 +13,7 @@ import userRoutes from './routes/userRoutes.mjs';
 import commentRoutes from './routes/commentRoutes.mjs'
 import savePostRoutes from './routes/savePostRoutes.mjs'
 import postRoutes from './routes/postRoutes.mjs'
+import { uploadRouter } from './uploadthing.mjs';
 
 const app = express();
 app.use(express.json());
@@ -69,6 +72,15 @@ app.use('/api/users', userRoutes);
 app.use('/api/comment', commentRoutes);
 app.use('/api/saves', savePostRoutes);
 app.use('/api/post', postRoutes);
+app.use(
+  "/api/uploadthing",
+  createRouteHandler({
+    router: uploadRouter,
+    config: {
+      uploadthingToken: process.env.UPLOADTHING_TOKEN,
+    },
+  })
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
