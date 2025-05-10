@@ -20,8 +20,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Add compound index for frequently queried fields
-userSchema.index({ userId: 1, username: 1 });
 
 const User = mongoose.model("User", userSchema);
 
