@@ -39,10 +39,6 @@ route.post('/singup', async (req, res) => {
   }
 
   try {
-    const existingUser = await User.findOne({ userId }).select('userId');
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
 
     const newUser = new User({
       username,
