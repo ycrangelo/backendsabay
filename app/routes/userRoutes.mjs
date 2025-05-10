@@ -58,9 +58,11 @@ route.post('/singup', async (req, res) => {
         password
       }
     });
-  } catch {
-    res.status(500).json({ error: 'Internal server error' });
-  }
+    
+  } catch (error) {
+    console.error(error); // This will log the actual error
+    res.status(500).json({ error: 'Internal server error', details: error.message });
+}
 });
 
 
