@@ -37,9 +37,7 @@ route.post('/singup', async (req, res) => {
   if (!username  || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-
   try {
-
     const newUser = new User({
       username,
       fullname,
@@ -55,7 +53,6 @@ route.post('/singup', async (req, res) => {
       user: {
         username,
         fullname,
-        userId,
         gender,
         contactNumber
       }
