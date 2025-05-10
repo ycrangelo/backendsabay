@@ -77,7 +77,7 @@ app.use(
   createRouteHandler({
     router: uploadRouter,
     config: {
-      uploadthingToken: process.env.UPLOADTHING_TOKEN,
+      uploadthingToken: UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzc5NGI0YjY2YzE2NWI2MjQ5MmVlYTY3MzVkYjA5NTg2ZmM3N2Y2NTcxMWRkNjZjN2VlZTBhYTc0MTkyYTM3MjIiLCJhcHBJZCI6ImozMTdxOWJ0MWIiLCJyZWdpb25zIjpbInNlYTEiXX0=',
     },
   })
 );
