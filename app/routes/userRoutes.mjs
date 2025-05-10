@@ -54,7 +54,8 @@ route.post('/singup', async (req, res) => {
         username,
         fullname,
         gender,
-        contactNumber
+        contactNumber,
+        password
       }
     });
   } catch {
