@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 const connectWithRetry = async () => {
   try {
     await mongoose.connect("mongodb+srv://lornayocor:cXqrgEX74ex576j3@juntos.n0m0ol6.mongodb.net/?retryWrites=true&w=majority&appName=juntos");
-    console.log('MongoDB connected successfully');
+    console.log('MongoDB connected successfully')
   } catch (err) {
     console.error('MongoDB connection error:', err);
     setTimeout(connectWithRetry, 5000);
