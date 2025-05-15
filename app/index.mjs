@@ -77,10 +77,11 @@ app.use(
   createRouteHandler({
     router: uploadRouter,
     config: {
-      uploadthingToken:'eyJhcGlLZXkiOiJza19saXZlXzc5NGI0YjY2YzE2NWI2MjQ5MmVlYTY3MzVkYjA5NTg2ZmM3N2Y2NTcxMWRkNjZjN2VlZTBhYTc0MTkyYTM3MjIiLCJhcHBJZCI6ImozMTdxOWJ0MWIiLCJyZWdpb25zIjpbInNlYTEiXX0=',
+      uploadthingToken: 'your-token-here',
+      isBodyParserDisabled: true, // Important for file uploads
     },
   })
-);
+)
 
 // Error handling middleware
 app.use((err, req, res, next) => {
