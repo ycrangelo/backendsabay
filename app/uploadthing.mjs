@@ -1,6 +1,5 @@
 import { createUploadthing } from "uploadthing/express";
 
-
 const f = createUploadthing();
 
 export const uploadRouter = {
@@ -8,10 +7,23 @@ export const uploadRouter = {
     image: {
       maxFileSize: "5MB",
       maxFileCount: 1,
+      allowedTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
     },
-  }).onUploadComplete((data) => {
-    console.log("upload completed", data);
-  }),
+  })
+    .middleware(async ({ req }) => {
+      return { userId: req.user?.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload completed", { metadata, file });
+
+      return {
+        success: true,
+        url: file.url,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      };
+    }),
 };
 
 // Optional typing workaround for ESM
