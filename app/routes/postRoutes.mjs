@@ -65,6 +65,32 @@ route.post('/likePost', async (req, res) => {
   }
 });
 
+// unliking a post
+route.post('/unlikePost', async (req, res) => {
+  const { postId } = req.body;
+
+  try {
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Ensure likes don't go below 0
+    post.likes = Math.max(post.likes - 1, 0);
+    await post.save();
+
+    res.status(200).json({
+      message: 'Post unliked successfully',
+      likes: post.likes
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 
 
