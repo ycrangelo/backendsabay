@@ -44,10 +44,9 @@ route.post('/createSavedPosts', async (req, res) => {
     await newSavePost.save();
 
     res.status(201).json({
-      message: 'Post created successfully',
+      message: 'save created successfully',
       Post: {
         userId,
-        thoughts,
       }
     });
   } catch {
