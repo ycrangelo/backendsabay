@@ -68,20 +68,20 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
-app.use('/api/users', userRoutes);
-app.use('/api/comment', commentRoutes);
-app.use('/api/saves', savePostRoutes);
-app.use('/api/post', postRoutes);
-app.use(
-  "/api/uploadthing",
+app.use('/api/uploadthing', 
+  express.raw({ type: 'application/octet-stream', limit: '5mb' }),
   createRouteHandler({
     router: uploadRouter,
     config: {
       uploadthingToken:'eyJhcGlLZXkiOiJza19saXZlXzc5NGI0YjY2YzE2NWI2MjQ5MmVlYTY3MzVkYjA5NTg2ZmM3N2Y2NTcxMWRkNjZjN2VlZTBhYTc0MTkyYTM3MjIiLCJhcHBJZCI6ImozMTdxOWJ0MWIiLCJyZWdpb25zIjpbInNlYTEiXX0=',
-      isBodyParserDisabled: true, // Important for file uploads
-    },
+      isBodyParserDisabled: true,
+    }
   })
-)
+);
+app.use('/api/users', userRoutes);
+app.use('/api/comment', commentRoutes);
+app.use('/api/saves', savePostRoutes);
+app.use('/api/post', postRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

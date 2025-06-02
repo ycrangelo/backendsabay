@@ -10,9 +10,6 @@ export const uploadRouter = {
       allowedTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
     },
   })
-    .middleware(async ({ req }) => {
-      return { userId: req.user?.id };
-    })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload completed", { metadata, file });
 
