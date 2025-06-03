@@ -68,13 +68,17 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
+// With this:
+import multer from 'multer';
+const upload = multer();
+
 app.use('/api/uploadthing', 
-  express.raw({ type: 'application/octet-stream', limit: '5mb' }),
+  upload.single('file'), // Handle multipart/form-data
   createRouteHandler({
     router: uploadRouter,
     config: {
-      uploadthingToken:'eyJhcGlLZXkiOiJza19saXZlXzc5NGI0YjY2YzE2NWI2MjQ5MmVlYTY3MzVkYjA5NTg2ZmM3N2Y2NTcxMWRkNjZjN2VlZTBhYTc0MTkyYTM3MjIiLCJhcHBJZCI6ImozMTdxOWJ0MWIiLCJyZWdpb25zIjpbInNlYTEiXX0=',
-      isBodyParserDisabled: true,
+      uploadthingToken: 'your_token_here',
+      isBodyParserDisabled: true, // Multer handles parsing
     }
   })
 );
